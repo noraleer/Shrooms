@@ -1,0 +1,178 @@
+---
+title: "EDA"
+author: "Nora Lee Reinhardt"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+mushrooms <- read_csv("mushrooms.csv")
+
+
+
+mushrooms$class[mushrooms$class == "e"] <- "edible"
+mushrooms$class[mushrooms$class == "p"] <- "poisonous"
+
+mushrooms$`cap-shape`[mushrooms$`cap-shape` == "b"] <- "bell"
+mushrooms$`cap-shape`[mushrooms$`cap-shape` == "c"] <- "conical"
+mushrooms$`cap-shape`[mushrooms$`cap-shape` == "x"] <- "convex"
+mushrooms$`cap-shape`[mushrooms$`cap-shape` == "f"] <- "flat"
+mushrooms$`cap-shape`[mushrooms$`cap-shape` == "k"] <- "knobbed"
+mushrooms$`cap-shape`[mushrooms$`cap-shape` == "s"] <- "sunken"
+
+mushrooms$`cap-surface`[mushrooms$`cap-surface` == "f"] <- "fibrous"
+mushrooms$`cap-surface`[mushrooms$`cap-surface` == "g"] <- "grooves"
+mushrooms$`cap-surface`[mushrooms$`cap-surface` == "y"] <- "scaly"
+mushrooms$`cap-surface`[mushrooms$`cap-surface` == "s"] <- "smooth"
+
+mushrooms$`cap-color`[mushrooms$`cap-color` == "n"] <- "brown"
+mushrooms$`cap-color`[mushrooms$`cap-color` == "b"] <- "buff"
+mushrooms$`cap-color`[mushrooms$`cap-color` == "c"] <- "cinnamon"
+mushrooms$`cap-color`[mushrooms$`cap-color` == "g"] <- "grey"
+mushrooms$`cap-color`[mushrooms$`cap-color` == "r"] <- "green"
+mushrooms$`cap-color`[mushrooms$`cap-color` == "u"] <- "purple"
+mushrooms$`cap-color`[mushrooms$`cap-color` == "w"] <- "white"
+mushrooms$`cap-color`[mushrooms$`cap-color` == "y"] <- "yellow"
+
+mushrooms$bruises[mushrooms$bruises == "TRUE"] <- "bruises"
+mushrooms$bruises[mushrooms$bruises == "FALSE"] <- "no bruises"
+
+mushrooms$odor[mushrooms$odor == "a"] <- "almond"
+mushrooms$odor[mushrooms$odor == "l"] <- "anise"
+mushrooms$odor[mushrooms$odor == "c"] <- "creosote"
+mushrooms$odor[mushrooms$odor == "y"] <- "fishy"
+mushrooms$odor[mushrooms$odor == "f"] <- "foul"
+mushrooms$odor[mushrooms$odor == "m"] <- "musty"
+mushrooms$odor[mushrooms$odor == "n"] <- "none"
+mushrooms$odor[mushrooms$odor == "p"] <- "pungent"
+mushrooms$odor[mushrooms$odor == "s"] <- "spicy"
+
+mushrooms$`gill-attachment`[mushrooms$`gill-attachment` == "a"] <- "attached"
+mushrooms$`gill-attachment`[mushrooms$`gill-attachment` == "d"] <- "descending"
+mushrooms$`gill-attachment`[mushrooms$`gill-attachment` == "f"] <- "free"
+mushrooms$`gill-attachment`[mushrooms$`gill-attachment` == "n"] <- "notched"
+
+mushrooms$`gill-spacing`[mushrooms$`gill-spacing` == "c"] <- "close"
+mushrooms$`gill-spacing`[mushrooms$`gill-spacing` == "w"] <- "crowded"
+mushrooms$`gill-spacing`[mushrooms$`gill-spacing` == "d"] <- "distant"
+
+mushrooms$`gill-size`[mushrooms$`gill-size` == "b"] <- "broad"
+mushrooms$`gill-size`[mushrooms$`gill-size` == "n"] <- "narrow"
+
+mushrooms$`gill-color`[mushrooms$`gill-color` == "k"] <- "black"
+mushrooms$`gill-color`[mushrooms$`gill-color` == "n"] <- "brown"
+mushrooms$`gill-color`[mushrooms$`gill-color` == "b"] <- "buff"
+mushrooms$`gill-color`[mushrooms$`gill-color` == "h"] <- "chocolate"
+mushrooms$`gill-color`[mushrooms$`gill-color` == "g"] <- "grey"
+mushrooms$`gill-color`[mushrooms$`gill-color` == "r"] <- "green"
+mushrooms$`gill-color`[mushrooms$`gill-color` == "o"] <- "orange"
+mushrooms$`gill-color`[mushrooms$`gill-color` == "p"] <- "pink"
+mushrooms$`gill-color`[mushrooms$`gill-color` == "u"] <- "purple"
+mushrooms$`gill-color`[mushrooms$`gill-color` == "e"] <- "red"
+mushrooms$`gill-color`[mushrooms$`gill-color` == "w"] <- "white"
+mushrooms$`gill-color`[mushrooms$`gill-color` == "y"] <- "yellow"
+
+mushrooms$`stalk-shape`[mushrooms$`stalk-shape` == "e"] <- "enlarging"
+mushrooms$`stalk-shape`[mushrooms$`stalk-shape` == "t"] <- "tapering"
+
+mushrooms$`stalk-root`[mushrooms$`stalk-root` == "b"] <- "bulbous"
+mushrooms$`stalk-root`[mushrooms$`stalk-root` == "c"] <- "club"
+mushrooms$`stalk-root`[mushrooms$`stalk-root` == "u"] <- "cup"
+mushrooms$`stalk-root`[mushrooms$`stalk-root` == "e"] <- "equal"
+mushrooms$`stalk-root`[mushrooms$`stalk-root` == "z"] <- "rhizo-morphs"
+mushrooms$`stalk-root`[mushrooms$`stalk-root` == "r"] <- "rooted"
+mushrooms$`stalk-root`[mushrooms$`stalk-root` == "?"] <- "missing"
+
+mushrooms$`stalk-surface-above-ring`[mushrooms$`stalk-surface-above-ring` == "f"] <- "fibrous"
+mushrooms$`stalk-surface-above-ring`[mushrooms$`stalk-surface-above-ring` == "y"] <- "scaly"
+mushrooms$`stalk-surface-above-ring`[mushrooms$`stalk-surface-above-ring` == "k"] <- "silky"
+mushrooms$`stalk-surface-above-ring`[mushrooms$`stalk-surface-above-ring` == "s"] <- "smooth"
+
+
+mushrooms$`stalk-surface-below-ring`[mushrooms$`stalk-surface-below-ring` == "f"] <- "fibrous"
+mushrooms$`stalk-surface-below-ring`[mushrooms$`stalk-surface-below-ring` == "y"] <- "scaly"
+mushrooms$`stalk-surface-below-ring`[mushrooms$`stalk-surface-below-ring` == "k"] <- "silky"
+mushrooms$`stalk-surface-below-ring`[mushrooms$`stalk-surface-below-ring` == "s"] <- "smooth"
+
+
+mushrooms$`stalk-color-above-ring`[mushrooms$`stalk-color-above-ring` == "n"] <- "brown"
+mushrooms$`stalk-color-above-ring`[mushrooms$`stalk-color-above-ring` == "b"] <- "buff"
+mushrooms$`stalk-color-above-ring`[mushrooms$`stalk-color-above-ring` == "c"] <- "cinnamon"
+mushrooms$`stalk-color-above-ring`[mushrooms$`stalk-color-above-ring` == "g"] <- "gray"
+mushrooms$`stalk-color-above-ring`[mushrooms$`stalk-color-above-ring` == "o"] <- "orange"
+mushrooms$`stalk-color-above-ring`[mushrooms$`stalk-color-above-ring` == "p"] <- "pink"
+mushrooms$`stalk-color-above-ring`[mushrooms$`stalk-color-above-ring` == "e"] <- "red"
+mushrooms$`stalk-color-above-ring`[mushrooms$`stalk-color-above-ring` == "w"] <- "white"
+mushrooms$`stalk-color-above-ring`[mushrooms$`stalk-color-above-ring` == "y"] <- "yellow"
+
+
+mushrooms$`stalk-color-below-ring`[mushrooms$`stalk-color-below-ring` == "n"] <- "brown"
+mushrooms$`stalk-color-below-ring`[mushrooms$`stalk-color-below-ring` == "b"] <- "buff"
+mushrooms$`stalk-color-below-ring`[mushrooms$`stalk-color-below-ring` == "c"] <- "cinnamon"
+mushrooms$`stalk-color-below-ring`[mushrooms$`stalk-color-below-ring` == "g"] <- "gray"
+mushrooms$`stalk-color-below-ring`[mushrooms$`stalk-color-below-ring` == "o"] <- "orange"
+mushrooms$`stalk-color-below-ring`[mushrooms$`stalk-color-below-ring` == "p"] <- "pink"
+mushrooms$`stalk-color-below-ring`[mushrooms$`stalk-color-below-ring` == "e"] <- "red"
+mushrooms$`stalk-color-below-ring`[mushrooms$`stalk-color-below-ring` == "w"] <- "white"
+mushrooms$`stalk-color-below-ring`[mushrooms$`stalk-color-below-ring` == "y"] <- "yellow"
+
+
+
+mushrooms$`veil-type`[mushrooms$`veil-type` == "p"] <- "partial"
+mushrooms$`veil-type`[mushrooms$`veil-type` == "p"] <- "universal"
+
+mushrooms$`veil-color`[mushrooms$`veil-color` == "n"] <- "brown"
+mushrooms$`veil-color`[mushrooms$`veil-color` == "o"] <- "orange"
+mushrooms$`veil-color`[mushrooms$`veil-color` == "w"] <- "white"
+mushrooms$`veil-color`[mushrooms$`veil-color` == "y"] <- "yellow"
+
+mushrooms$`ring-number`[mushrooms$`ring-number` == "n"] <- "none"
+mushrooms$`ring-number`[mushrooms$`ring-number` == "o"] <- "one"
+mushrooms$`ring-number`[mushrooms$`ring-number` == "t"] <- "two"
+
+mushrooms$`ring-type`[mushrooms$`ring-type` == "c"] <- "cobwebby"
+mushrooms$`ring-type`[mushrooms$`ring-type` == "e"] <- "evanescent"
+mushrooms$`ring-type`[mushrooms$`ring-type` == "f"] <- "flaring"
+mushrooms$`ring-type`[mushrooms$`ring-type` == "l"] <- "large"
+mushrooms$`ring-type`[mushrooms$`ring-type` == "n"] <- "none"
+mushrooms$`ring-type`[mushrooms$`ring-type` == "p"] <- "pendant"
+mushrooms$`ring-type`[mushrooms$`ring-type` == "s"] <- "sheathing"
+mushrooms$`ring-type`[mushrooms$`ring-type` == "z"] <- "zone"
+
+
+mushrooms$`spore-print-color`[mushrooms$`spore-print-color` == "k"] <- "black"
+mushrooms$`spore-print-color`[mushrooms$`spore-print-color` == "n"] <- "brown"
+mushrooms$`spore-print-color`[mushrooms$`spore-print-color` == "b"] <- "buff"
+mushrooms$`spore-print-color`[mushrooms$`spore-print-color` == "h"] <- "chocolate"
+mushrooms$`spore-print-color`[mushrooms$`spore-print-color` == "r"] <- "green"
+mushrooms$`spore-print-color`[mushrooms$`spore-print-color` == "o"] <- "orange"
+mushrooms$`spore-print-color`[mushrooms$`spore-print-color` == "u"] <- "purple"
+mushrooms$`spore-print-color`[mushrooms$`spore-print-color` == "w"] <- "white"
+mushrooms$`spore-print-color`[mushrooms$`spore-print-color` == "y"] <- "yellow"
+
+mushrooms$population[mushrooms$population == "a"] <- "abundant"
+mushrooms$population[mushrooms$population == "c"] <- "clustered"
+mushrooms$population[mushrooms$population == "n"] <- "numerous"
+mushrooms$population[mushrooms$population == "s"] <- "scattered"
+mushrooms$population[mushrooms$population == "v"] <- "several"
+mushrooms$population[mushrooms$population == "y"] <- "solitary"
+
+mushrooms$habitat[mushrooms$habitat == "g"] <- "grasses"
+mushrooms$habitat[mushrooms$habitat == "l"] <- "leaves"
+mushrooms$habitat[mushrooms$habitat == "m"] <- "meadows"
+mushrooms$habitat[mushrooms$habitat == "p"] <- "paths"
+mushrooms$habitat[mushrooms$habitat == "u"] <- "urban"
+mushrooms$habitat[mushrooms$habitat == "w"] <- "waste"
+mushrooms$habitat[mushrooms$habitat == "d"] <- "wood"
+```
+```{r}
+library(janitor)
+
+mushrooms <- clean_names(mushrooms)
+```
+
