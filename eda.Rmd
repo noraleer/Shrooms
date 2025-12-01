@@ -174,5 +174,8 @@ mushrooms$habitat[mushrooms$habitat == "d"] <- "wood"
 library(janitor)
 
 mushrooms <- clean_names(mushrooms)
+
+
+#write.csv(mushrooms, "mushrooms_clean.csv")
 ```
 
