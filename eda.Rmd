@@ -178,4 +178,28 @@ mushrooms <- clean_names(mushrooms)
 
 #write.csv(mushrooms, "mushrooms_clean.csv")
 ```
+```{r}
+mushrooms[] <- lapply(mushrooms, factor)
+```
+
+
+```{r}
+library(tidyverse)
+library(rpart)
+library(rpart.plot)
+
+
+mushroomtrain <- mushrooms[0:5687,]
+mushroomtest <- mushrooms[5688:8124,]
+
+set.seed(67)
+#overfitted tree
+mushroom_tree1 <- rpart(class ~ ., data = mushroomtrain, cp = 10^(-5))
+#predict(titanic_tree1)
+
+printcp(mushroom_tree1)
+
+rpart.plot(mushroom_tree1)
+
+```
 
