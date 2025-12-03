@@ -180,6 +180,14 @@ mushrooms <- clean_names(mushrooms)
 ```
 ```{r}
 mushrooms[] <- lapply(mushrooms, factor)
+
+mushrooms <- mushrooms %>% dplyr::select(-c(veil_type, stalk_color_above_ring, stalk_color_below_ring)) %>%
+  dplyr::mutate(class = case_when(class == "edible" ~ 0, class == "poisonous" ~ 1))
+
+mushrooms <- mushrooms %>% dplyr::select(-odor)
+mushrooms <- mushrooms %>% dplyr::select(-spore_print_color)
+mushrooms <- mushrooms %>% dplyr::select(-gill_size)
+mushrooms <- mushrooms %>% dplyr::select(-ring_type)
 ```
 
 
@@ -187,10 +195,24 @@ mushrooms[] <- lapply(mushrooms, factor)
 library(tidyverse)
 library(rpart)
 library(rpart.plot)
+library(pROC)
 
 
-mushroomtrain <- mushrooms[0:5687,]
-mushroomtest <- mushrooms[5688:8124,]
+mushroom_idx = sample(1:nrow(mushrooms),nrow(mushrooms)*.7)
+mushroomtrain <- mushrooms[mushroom_idx,]
+mushroomtest <- mushrooms[-mushroom_idx,]
+
+
+mushroomlm <- glm(class ~ ., data = mushroomtrain, family = "binomial")
+
+summary(mushroomlm)
+
+dfpred <- data.frame(
+  mushroomtest,
+  pred = predict(mushroomlm, mushroomtest, type = "response")
+)
+
+auc(roc(dfpred$class, dfpred$pred))
 
 set.seed(67)
 #overfitted tree
@@ -201,5 +223,24 @@ printcp(mushroom_tree1)
 
 rpart.plot(mushroom_tree1)
 
+
+dfpred <- data.frame(
+  mushroomtest,
+  pred = predict(mushroom_tree1, mushroomtest, type = "response")
+)
+
+```
+
+```{r}
+pairs <- combn(names(mushrooms), 2, simplify = FALSE)
+
+perfect_assoc <- Filter(Negate(is.null),
+  lapply(pairs, function(p) {
+    tab <- table(mushrooms[[p[1]]], mushrooms[[p[2]]])
+    if(all(rowSums(tab > 0) == 1) && all(colSums(tab > 0) == 1)) return(p)
+  })
+)
+
+perfect_assoc
 ```
 
