@@ -188,6 +188,15 @@ mushrooms <- mushrooms %>% dplyr::select(-odor)
 mushrooms <- mushrooms %>% dplyr::select(-spore_print_color)
 mushrooms <- mushrooms %>% dplyr::select(-gill_size)
 mushrooms <- mushrooms %>% dplyr::select(-ring_type)
+mushrooms <- mushrooms %>% dplyr::select(-cap_surface)
+mushrooms <- mushrooms %>% dplyr::select(-gill_attachment)
+mushrooms <- mushrooms %>% dplyr::select(-stalk_root)
+mushrooms <- mushrooms %>% dplyr::select(-stalk_surface_above_ring)
+mushrooms <- mushrooms %>% dplyr::select(-stalk_surface_below_ring)
+mushrooms <- mushrooms %>% dplyr::select(-ring_number)
+
+#write.csv(mushrooms, "mushrooms_clean1.csv")
+
 ```
 
 
@@ -197,7 +206,7 @@ library(rpart)
 library(rpart.plot)
 library(pROC)
 
-
+mushrooms$class <- as.factor(mushrooms$class)
 mushroom_idx = sample(1:nrow(mushrooms),nrow(mushrooms)*.7)
 mushroomtrain <- mushrooms[mushroom_idx,]
 mushroomtest <- mushrooms[-mushroom_idx,]
@@ -223,24 +232,49 @@ printcp(mushroom_tree1)
 
 rpart.plot(mushroom_tree1)
 
+mushroom_tree2 <- rpart(class ~ ., data = mushroomtrain, cp =  0.00254176)
+#predict(titanic_tree1)
 
-dfpred <- data.frame(
-  mushroomtest,
-  pred = predict(mushroom_tree1, mushroomtest, type = "response")
-)
+printcp(mushroom_tree2)
+
+rpart.plot(mushroom_tree2)
+
+
+mushroom_tree3 <- rpart(class ~ ., data = mushroomtrain, cp =  0.0078673)
+#predict(titanic_tree1)
+
+printcp(mushroom_tree3)
+
+rpart.plot(mushroom_tree3)
 
 ```
 
 ```{r}
-pairs <- combn(names(mushrooms), 2, simplify = FALSE)
+library(randomForest)
 
-perfect_assoc <- Filter(Negate(is.null),
-  lapply(pairs, function(p) {
-    tab <- table(mushrooms[[p[1]]], mushrooms[[p[2]]])
-    if(all(rowSums(tab > 0) == 1) && all(colSums(tab > 0) == 1)) return(p)
-  })
-)
+mushroomtest$class <- as.factor(mushroomtest$class)
 
-perfect_assoc
+rfmushroom <- randomForest(class ~ ., data = mushroomtest)
+
+
+rfmushroom
+plot(rfmushroom)
+
+plot(rfmushroom$err.rate[, "OOB"], 
+     type = "l", 
+     xlab = "Number of Trees", 
+     ylab = "OOB Error Rate", 
+     main = "Out-of-Bag Error vs. Number of Trees")
+
+#optimal oob i think is around 100 trees
+
+rfmushroom2 <- randomForest(class ~ ., data = mushroomtrain, ntree = 5)
+
+rfmushroomc2
+
+plot(rfmushroom2)
+
+str(rfmushroom2)
+varImpPlot(rfmushroom2)
 ```
 
